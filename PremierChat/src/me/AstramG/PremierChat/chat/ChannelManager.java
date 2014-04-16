@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.entity.Player;
+import me.AstramG.PremierChat.main.PremierChat;
 
-import me.AstramG.PremierChat.PremierChat;
+import org.bukkit.entity.Player;
 
 public class ChannelManager {
 	

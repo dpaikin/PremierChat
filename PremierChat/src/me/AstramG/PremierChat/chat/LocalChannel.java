@@ -3,7 +3,7 @@ package me.AstramG.PremierChat.chat;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.AstramG.PremierChat.PremierChat;
+import me.AstramG.PremierChat.main.PremierChat;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

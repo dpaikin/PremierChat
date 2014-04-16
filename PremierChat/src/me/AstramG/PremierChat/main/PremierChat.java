@@ -1,11 +1,11 @@
-package me.AstramG.PremierChat;
+package me.AstramG.PremierChat.main;
 
 import java.io.File;
 import java.util.List;
 
 import me.AstramG.PremierChat.chat.Channel;
-import me.AstramG.PremierChat.chat.ChannelType;
 import me.AstramG.PremierChat.chat.ChannelManager;
+import me.AstramG.PremierChat.chat.ChannelType;
 import me.AstramG.PremierChat.chat.LocalChannel;
 import me.AstramG.PremierChat.chat.Messenger;
 import me.AstramG.PremierChat.chat.PermissionChannel;
@@ -15,43 +15,44 @@ import me.AstramG.PremierChat.listeners.ChatListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.avaje.ebeaninternal.server.core.ConfigBuilder;
-
 public class PremierChat extends JavaPlugin {
 	
 	/*
 	 * Todo:
 	 * - Implement Local Chat - DONE
-	 * - Implement Global Chat
-	 * - Implement World Chat
-	 * - Custom Chat Channels for those 3 chats
-	 * - Chat Channels for specific PEX groups
-	 * - Chat Timers
-	 * - Permissions for chat channels
-	 * - Price for certain channels
-	 * - Channel Join Messages
-	 * - Channel Leave Messages
-	 * - Channel Bans
-	 * - Channel Mutes
-	 * - Channel Moderators
-	 * - Prefixes
-	 * - Mentioning System
-	 * - Messaging System
-	 * - MySQL support
+	 * - Implement Global Chat - DONE
+	 * - Implement World Chat - DONE
+	 * - Custom Chat Channels for those 3 chats - DONE
+	 * - Chat Channels for specific PEX groups - DONE
+	 * - Chat Timers - NOT DONE
+	 * - Permissions for chat channels - DONE
+	 * - Price for certain channels - NOT DONE
+	 * - Channel Join Messages - IMPLEMENTATION ADDED BUT NOT DONE
+	 * - Channel Leave Messages - IMPLEMENTATION ADDED BUT NOT DONE
+	 * - Channel Bans - IMPLEMENTATION SOMEWHAT ADDED BUT NOT DONE
+	 * - Channel Mutes - NOT DONE
+	 * - Channel Moderators - NOT DONE
+	 * - Channel Prefixes - DONE
+	 * - Player Prefixes - NOT DONE
+	 * - Mentioning System - NOT DONE
+	 * - Messaging System - NOT DONE
+	 * - MySQL support - NOT DONE
+	 * - MultiChannel Support - NOT DONE
+	 * - Bungee support - NOT DONE
 	 */
 	
 	Messenger messenger;
 	ChannelManager channelManager;
 	static PremierChat premierChat;
 	
-	@Override
 	public void onEnable() {
+		Bukkit.broadcastMessage("TEST");
 		premierChat = this;
 		messenger = new Messenger(this);
 		channelManager = new ChannelManager(this);
 		registerEvents();
 		registerCommands();
-		loadChannels();
+		loadServerChannels();
 		if (!new File(getDataFolder(), "config.yml").exists()) {
 			saveDefaultConfig();
 		}
@@ -69,7 +70,7 @@ public class PremierChat extends JavaPlugin {
 		return channelManager;
 	}
 	
-	public void loadChannels() {
+	public void loadServerChannels() {
 		List<String> onlineChannels = this.getConfig().getStringList("Channels.OnlineChannels");
 		String defaultChannel = this.getConfig().getString("Channels.DefaultChannel");
 		for (String onlineChannel : onlineChannels) {

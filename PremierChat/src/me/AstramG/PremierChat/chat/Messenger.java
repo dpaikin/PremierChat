@@ -1,6 +1,6 @@
 package me.AstramG.PremierChat.chat;
 
-import me.AstramG.PremierChat.PremierChat;
+import me.AstramG.PremierChat.main.PremierChat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

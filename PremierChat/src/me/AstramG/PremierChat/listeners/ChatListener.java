@@ -3,11 +3,11 @@ package me.AstramG.PremierChat.listeners;
 
 import java.util.List;
 
-import me.AstramG.PremierChat.PremierChat;
 import me.AstramG.PremierChat.chat.Channel;
 import me.AstramG.PremierChat.chat.ChannelType;
 import me.AstramG.PremierChat.chat.LocalChannel;
 import me.AstramG.PremierChat.events.ChannelJoinEvent;
+import me.AstramG.PremierChat.main.PremierChat;
 import net.minecraft.server.v1_7_R1.EntityPlayer;
 import net.minecraft.server.v1_7_R1.PacketPlayOutCloseWindow;
 

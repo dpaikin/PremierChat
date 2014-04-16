@@ -3,9 +3,9 @@ package me.AstramG.PremierChat.chat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
+import me.AstramG.PremierChat.main.PremierChat;
 
-import me.AstramG.PremierChat.PremierChat;
+import org.bukkit.ChatColor;
 
 public class Channel {
 	
@@ -19,7 +19,7 @@ public class Channel {
 		this.channelName = name;
 		this.channelType = channelType;
 		this.format = ChatColor.translateAlternateColorCodes('&', format);
-		bannedPlayers = PremierChat.getInstance().getChannelManager().getBannedPlayers(name);
+		setBannedPlayers(PremierChat.getInstance().getChannelManager().getBannedPlayers(name));
 	}
 	
 	public String getName() {
@@ -44,6 +44,14 @@ public class Channel {
 	
 	public void setPlayers(List<String> players) {
 		this.players = players;
+	}
+
+	public List<String> getBannedPlayers() {
+		return bannedPlayers;
+	}
+
+	public void setBannedPlayers(List<String> bannedPlayers) {
+		this.bannedPlayers = bannedPlayers;
 	}
 	
 }

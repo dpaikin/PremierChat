@@ -3,7 +3,6 @@ package me.AstramG.PremierChat.commands;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.AstramG.PremierChat.PremierChat;
 import me.AstramG.PremierChat.chat.Channel;
 import me.AstramG.PremierChat.chat.Messenger;
 import me.AstramG.PremierChat.chat.Messenger.MessageType;
@@ -12,6 +11,7 @@ import me.AstramG.PremierChat.chat.UnlistedChannel;
 import me.AstramG.PremierChat.events.ChannelJoinEvent;
 import me.AstramG.PremierChat.events.ChannelLeaveEvent;
 import me.AstramG.PremierChat.events.ChannelLeaveEvent.LeaveReason;
+import me.AstramG.PremierChat.main.PremierChat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
