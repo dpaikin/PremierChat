@@ -1,5 +1,6 @@
 package me.AstramG.PremierChat;
 
+import java.io.File;
 import java.util.List;
 
 import me.AstramG.PremierChat.chat.Channel;
@@ -13,6 +14,8 @@ import me.AstramG.PremierChat.listeners.ChatListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.avaje.ebeaninternal.server.core.ConfigBuilder;
 
 public class PremierChat extends JavaPlugin {
 	
@@ -49,6 +52,9 @@ public class PremierChat extends JavaPlugin {
 		registerEvents();
 		registerCommands();
 		loadChannels();
+		if (!new File(getDataFolder(), "config.yml").exists()) {
+		     saveDefaultConfig();
+		}
 	}
 	
 	public static PremierChat getInstance() {

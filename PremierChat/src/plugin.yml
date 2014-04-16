@@ -1,0 +1,8 @@
+name: PremierChat
+version: 0.3
+main: me.AstramG.PremierChat.PremierChat
+author: AstramG
+commands:
+  pc:
+    usage: /pc <args...>
+    description: Base command for PremierChat!
