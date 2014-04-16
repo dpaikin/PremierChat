@@ -1,5 +1,6 @@
 package me.AstramG.PremierChat.listeners;
 
+
 import java.util.List;
 
 import me.AstramG.PremierChat.PremierChat;
@@ -49,7 +50,7 @@ public class ChatListener implements Listener {
 	}
 	
 	public void doChannelMessage(Player player, String message, Channel channel) {
-		String format = channel.getFormat().replace("%name%", player.getName());
+		String format = channel.getFormat().replace(";name;", player.getName());
 		if (channel.getType() == ChannelType.LOCAL) { 
 			LocalChannel localChannel = (LocalChannel) channel;
 			List<Player> receivers = localChannel.getReceivers(player);

@@ -4,9 +4,9 @@ Channels:
   OnlineChannels: Global, Local
   DefaultChannel: Global
   Global:
-    format: &7[&2Global&7] &6%name% &7->&f 
+    format: &7[&2Global&7] &6;name; &7->&f 
     type: GLOBAL
   Local:
-    format: &7[&4Local&7] &6%name% &7->&f 
+    format: &7[&4Local&7] &6;name; &7->&f 
     type: LOCAL
     range: 100

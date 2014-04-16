@@ -53,7 +53,7 @@ public class PremierChat extends JavaPlugin {
 		registerCommands();
 		loadChannels();
 		if (!new File(getDataFolder(), "config.yml").exists()) {
-		     saveDefaultConfig();
+			saveDefaultConfig();
 		}
 	}
 	
