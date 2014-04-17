@@ -1,5 +1,5 @@
 name: PremierChat
-version: 0.9
+version: 1.0
 author: AstramG
 main: me.AstramG.PremierChat.main.PremierChat
 commands:
