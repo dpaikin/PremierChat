@@ -106,10 +106,12 @@ public class PremierChatCommand implements CommandExecutor {
 								if (args[2].equalsIgnoreCase("unmute")) {
 									if (player.hasPermission(rootPerm + ".unmute"))
 										premierChat.getChannelManager().mutedPlayers.remove(args[3]);
+									premierChat.getMessenger().sendMessage(player, "You have unmuted " + args[3] + "!", MessageType.NOTIFICATION);
 								} else if (args[2].equalsIgnoreCase("kick")) {
 									if (player.hasPermission(rootPerm + ".kick")) {
 										premierChat.getMessenger().sendMessage(Bukkit.getPlayer(args[3]), "You have been kicked from the channel by " + player.getName() + "!", MessageType.DANGER);
 										premierChat.getChannelManager().joinNewChannel(Bukkit.getPlayer(args[3]), premierChat.getChannelManager().getDefaultChannel().getName());
+										premierChat.getMessenger().sendMessage(player, "You have kicked " + args[3] + "!", MessageType.NOTIFICATION);
 									}
 								}
 							}
@@ -120,12 +122,21 @@ public class PremierChatCommand implements CommandExecutor {
 										Player muted = Bukkit.getPlayer(args[3]);
 										int time = Integer.parseInt(args[4]);
 										premierChat.getChannelManager().mutePlayer(muted, time);
+										premierChat.getMessenger().sendMessage(player, "You have muted " + muted.getName() + " for " + time + " minute(s)!", MessageType.NOTIFICATION);
+									}
+								} else if (args[2].equalsIgnoreCase("pardon")) {
+									if (player.hasPermission(rootPerm + ".pardon")) {
+										OfflinePlayer banned = Bukkit.getOfflinePlayer(args[3]);
+										String channel = args[4];
+										premierChat.getChannelManager().unbanPlayer(banned, channel);
+										premierChat.getMessenger().sendMessage(player, "You have pardoned " + banned.getName() + " from " + channel + "!", MessageType.NOTIFICATION);
 									}
 								} else if (args[2].equalsIgnoreCase("ban")) {
 									if (player.hasPermission(rootPerm + ".ban")) {
 										OfflinePlayer banned = Bukkit.getOfflinePlayer(args[3]);
 										String channel = args[4];
 										premierChat.getChannelManager().banPlayer(banned, channel);
+										premierChat.getMessenger().sendMessage(player, "You have banned " + banned.getName() + " from " + channel + "!", MessageType.NOTIFICATION);
 									}
 								} else if (args[2].equalsIgnoreCase("move")) {
 									if (player.hasPermission(rootPerm + ".move")) {
@@ -142,6 +153,7 @@ public class PremierChatCommand implements CommandExecutor {
 										List<String> newPlayers = channel.getPlayers();
 										newPlayers.add(playerToMove.getName());
 										channel.setPlayers(newPlayers);
+										premierChat.getMessenger().sendMessage(player, "You have moved " + playerToMove.getName() + "!", MessageType.NOTIFICATION);
 										premierChat.getMessenger().sendMessage(playerToMove, "You have been moved!", MessageType.NOTIFICATION);
 									}
 								}

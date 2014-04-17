@@ -11,6 +11,7 @@ import me.AstramG.PremierChat.chat.Messenger;
 import me.AstramG.PremierChat.chat.PermissionChannel;
 import me.AstramG.PremierChat.chat.UnlistedChannel;
 import me.AstramG.PremierChat.commands.PremierChatCommand;
+import me.AstramG.PremierChat.commands.UUIDCommands;
 import me.AstramG.PremierChat.listeners.ChatListener;
 
 import org.bukkit.Bukkit;
@@ -30,17 +31,17 @@ public class PremierChat extends JavaPlugin {
 	 * - Price for speaking in certain channels - NOT DONE / QUESTIONABLE ADDITION
 	 * - Channel Join Messages - DONE
 	 * - Channel Leave Messages - IMPLEMENTATION ADDED / QUESTIONABLE ADDITION
-	 * - Channel Bans - IMPLEMENTATION SOMEWHAT ADDED BUT NOT DONE
+	 * - Channel Bans - DONE
 	 * - Channel Mutes - DONE
 	 * - Channel Moderators - DONE
 	 * - Channel Prefixes - DONE
-	 * - Player Prefixes - NOT DONE
-	 * - Mentioning System - NOT DONE
+	 * - Player Prefixes - DONE
+	 * - Mentioning System - DONE
 	 * - Messaging System - NOT DONE
 	 * - MySQL support - NOT DONE
 	 * - MultiChannel Support - NOT DONE
 	 * - Bungee support - NOT DONE
-	 * - Update to UUIDs - NOT DONE
+	 * - Update to UUIDs - DONE WITH BANS AND ALL CURRENT FEATURES
 	 */
 	
 	Messenger messenger;
@@ -70,6 +71,19 @@ public class PremierChat extends JavaPlugin {
 	public ChannelManager getChannelManager() {
 		return channelManager;
 	}
+	
+	/*
+	 Prefixes:
+	   Admin:
+	     Prefix: ?7[?4Admin?7]
+	   Default:
+	     Prefix: ?7[?3Noob?7]
+	   Players:
+	     UUID:
+	       Prefix: Admin
+	     UUID:
+	       Prefix: Admin
+	 */
 	
 	public void loadServerChannels() {
 		List<String> onlineChannels = this.getConfig().getStringList("Channels.OnlineChannels");
@@ -107,6 +121,7 @@ public class PremierChat extends JavaPlugin {
 	
 	public void registerCommands() {
 		getCommand("pc").setExecutor(new PremierChatCommand(this));
+		getCommand("uuid").setExecutor(new UUIDCommands(this));
 	}
 	
 }

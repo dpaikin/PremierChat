@@ -3,11 +3,9 @@ package me.AstramG.PremierChat.chat;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -114,7 +112,7 @@ public class ChannelManager {
 		return false;
 	}
 	
-	public void unbanPlayer(Player player, String channelName) {
+	public void unbanPlayer(OfflinePlayer banned, String channelName) {
 		File file = new File("PremierChannels/" + channelName + "Bans.txt");
 		List<String> players = new ArrayList<String>();
 		try {
@@ -129,7 +127,7 @@ public class ChannelManager {
 	    	e.printStackTrace();
 	    }
 		try {
-			players.remove(UUIDFetcher.getUUIDOf(player.getName()).toString());
+			players.remove(UUIDFetcher.getUUIDOf(banned.getName()).toString());
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -139,8 +137,7 @@ public class ChannelManager {
 		try {
 			writer = new BufferedWriter(new FileWriter(newFile));
 			for (String uuid : players) {
-				writer.write(uuid);
-				writer.newLine();
+				writer.write(uuid + "\r\n");
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -158,8 +155,8 @@ public class ChannelManager {
 		File file = new File("PremierChannels/" + channelName + "Bans.txt");
 		BufferedWriter writer;
 		try {
-			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
-			writer.write(uuid.toString());
+			writer = new BufferedWriter(new FileWriter(file, true));
+			writer.write(uuid.toString() + "\r\n");
 			writer.flush();
 			writer.close();
 		} catch (IOException e) {

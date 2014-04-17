@@ -2,6 +2,7 @@ package me.AstramG.PremierChat.listeners;
 
 
 import java.util.List;
+import java.util.UUID;
 
 import me.AstramG.PremierChat.chat.Channel;
 import me.AstramG.PremierChat.chat.ChannelType;
@@ -9,9 +10,11 @@ import me.AstramG.PremierChat.chat.LocalChannel;
 import me.AstramG.PremierChat.chat.Messenger.MessageType;
 import me.AstramG.PremierChat.events.ChannelJoinEvent;
 import me.AstramG.PremierChat.main.PremierChat;
+import me.AstramG.PremierChat.util.UUIDFetcher;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,6 +49,11 @@ public class ChatListener implements Listener {
 	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			if (event.getMessage().contains(p.getName())) {
+				p.playSound(p.getLocation(), Sound.NOTE_PIANO, 2, 2);
+			}
+		}
 		if (premierchat.getChannelManager().mutedPlayers.contains(player.getName())) {
 			premierchat.getMessenger().sendMessage(player, "You are muted, therefore you may not speak!", MessageType.DANGER);
 			event.setCancelled(true);
@@ -61,7 +69,17 @@ public class ChatListener implements Listener {
 	}
 	
 	public void doChannelMessage(Player player, String message, Channel channel) {
-		String format = channel.getFormat().replace(";name;", player.getName()).replace(";msg;", message).replace("/fbracket/", "[").replace("/rbracket/", "]");
+		UUID uuid = null;
+		try {
+			uuid = UUIDFetcher.getUUIDOf(player.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String prefix = "Default";
+		if (premierchat.getConfig().getString("Prefixes.Players." + uuid.toString() + ".Prefix") != null) {
+			prefix = premierchat.getConfig().getString("Prefixes.Players." + uuid.toString() + ".Prefix");
+		}
+		String format = channel.getFormat().replace(";prefix;", ChatColor.translateAlternateColorCodes('?', premierchat.getConfig().getString("Prefixes." + prefix + ".prefix").replace("none",  ""))).replace(";name;", player.getName()).replace(";msg;", message).replace("/fbracket/", "[").replace("/rbracket/", "]");
 		if (channel.getType() == ChannelType.LOCAL) { 
 			LocalChannel localChannel = (LocalChannel) channel;
 			List<Player> receivers = localChannel.getReceivers(player);

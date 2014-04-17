@@ -2,6 +2,9 @@ PluginName: TestChat
 Admin:
   Permission: premierchat.admin
 PluginPrefix: TC
+Prefixes:
+  Default:
+    prefix: Hi
 Channels:
   OnlineChannels: 
     - Global
