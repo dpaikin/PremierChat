@@ -32,7 +32,7 @@ public class PremierChat extends JavaPlugin {
 	 * - Channel Leave Messages - IMPLEMENTATION ADDED / QUESTIONABLE ADDITION
 	 * - Channel Bans - IMPLEMENTATION SOMEWHAT ADDED BUT NOT DONE
 	 * - Channel Mutes - DONE
-	 * - Channel Moderators - NOT DONE
+	 * - Channel Moderators - DONE
 	 * - Channel Prefixes - DONE
 	 * - Player Prefixes - NOT DONE
 	 * - Mentioning System - NOT DONE
@@ -40,6 +40,7 @@ public class PremierChat extends JavaPlugin {
 	 * - MySQL support - NOT DONE
 	 * - MultiChannel Support - NOT DONE
 	 * - Bungee support - NOT DONE
+	 * - Update to UUIDs - NOT DONE
 	 */
 	
 	Messenger messenger;
@@ -91,6 +92,7 @@ public class PremierChat extends JavaPlugin {
 				channel.setTimer(true, this.getConfig().getInt(root + "timer"));
 			}
 			channel.setJoinMessage(this.getConfig().getString(root + "joinMessage"));
+			channel.setBannedPlayers(channelManager.getBannedPlayers(channel.getName()));
 			if (!(onlineChannel.equalsIgnoreCase(defaultChannel))) {
 				channelManager.registerNewChannel(channel, false);
 			} else {

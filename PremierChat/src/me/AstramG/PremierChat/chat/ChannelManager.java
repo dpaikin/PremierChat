@@ -1,21 +1,27 @@
 package me.AstramG.PremierChat.chat;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import me.AstramG.PremierChat.chat.Messenger.MessageType;
 import me.AstramG.PremierChat.events.ChannelJoinEvent;
 import me.AstramG.PremierChat.events.ChannelLeaveEvent;
 import me.AstramG.PremierChat.events.ChannelLeaveEvent.LeaveReason;
 import me.AstramG.PremierChat.main.PremierChat;
+import me.AstramG.PremierChat.util.UUIDFetcher;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -72,6 +78,16 @@ public class ChannelManager {
 				return;
 			}
 		}
+		UUID uuid = null;
+		try {
+			uuid = UUIDFetcher.getUUIDOf(player.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (getChannel(channelName).getBannedPlayers().contains(uuid.toString())) {
+			premierChat.getMessenger().sendMessage(player, "You are banned from this channel!", MessageType.DANGER);
+			return;
+		}
 		if (this.playerChannels.get(player.getName()) != null) {
 			Channel currentChannel = playerChannels.get(player.getName());
 			Bukkit.getPluginManager().callEvent(new ChannelLeaveEvent(currentChannel, player, LeaveReason.JOIN_ANOTHER));
@@ -98,6 +114,66 @@ public class ChannelManager {
 		return false;
 	}
 	
+	public void unbanPlayer(Player player, String channelName) {
+		File file = new File("PremierChannels/" + channelName + "Bans.txt");
+		List<String> players = new ArrayList<String>();
+		try {
+			FileReader fileReader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			String line = "";
+	    	while ((line = bufferedReader.readLine()) != null) {
+	    		players.add(line);
+	    	}
+	    	bufferedReader.close();
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+	    }
+		try {
+			players.remove(UUIDFetcher.getUUIDOf(player.getName()).toString());
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		file.delete();
+		File newFile = new File("PremierChannels/" + channelName + "Bans.txt");
+		BufferedWriter writer;
+		try {
+			writer = new BufferedWriter(new FileWriter(newFile));
+			for (String uuid : players) {
+				writer.write(uuid);
+				writer.newLine();
+			}
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void banPlayer(OfflinePlayer player, String channelName) {
+		UUID uuid = null;
+		try {
+			uuid = UUIDFetcher.getUUIDOf(player.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		File file = new File("PremierChannels/" + channelName + "Bans.txt");
+		BufferedWriter writer;
+		try {
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+			writer.write(uuid.toString());
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (player.isOnline()) {
+			if (playerChannels.get(player.getName()).getName().equalsIgnoreCase(channelName)) {
+				joinNewChannel(player.getPlayer(), getDefaultChannel().getName());
+			}
+			premierChat.getMessenger().sendMessage(player.getPlayer(), "You have been banned from the channel " + channelName + "!", MessageType.DANGER);
+		}
+		getChannel(channelName).setBannedPlayers(getBannedPlayers(channelName));
+	}
+	
 	public List<String> getBannedPlayers(String channelName) {
 		File dir = new File("PremierChannels");
 		if (!(dir.exists())) {
@@ -113,20 +189,16 @@ public class ChannelManager {
 			return null;
 		}
 		try {
-			FileReader fr = new FileReader(file);
-			@SuppressWarnings("resource")
-			BufferedReader br = new BufferedReader(fr);
-			String line = null;
-			List<String> banned = new ArrayList<String>();
-			try {
-				while ((line = br.readLine()) != null) {
-					banned.add(line);
-				}
-				return banned; 
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} catch (FileNotFoundException e) {
+		    FileReader fileReader = new FileReader(file);
+		    BufferedReader bufferedReader = new BufferedReader(fileReader);
+		    String line = "";
+		    List<String> players = new ArrayList<String>();
+		    while ((line = bufferedReader.readLine()) != null) {
+		    	players.add(line);
+		    }
+		    bufferedReader.close();
+		    return players;
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;

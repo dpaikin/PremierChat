@@ -15,6 +15,7 @@ import me.AstramG.PremierChat.main.PremierChat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -79,7 +80,7 @@ public class PremierChatCommand implements CommandExecutor {
 								sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "Admin commands:");
 								sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel admin mute <player> <min> " + ChatColor.GRAY + "--> Mutes the specified player for a certain time");
 								sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel admin unmute <player> " + ChatColor.GRAY + "--> Umutes the specified player");
-								sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel admin ban <channel> <player> " + ChatColor.GRAY + "--> Bans the specified player from a channel");
+								sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel admin ban <player> <channel> " + ChatColor.GRAY + "--> Bans the specified player from a channel");
 								sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel admin pardon <player> <channel> " + ChatColor.GRAY + "--> Unbans the specified player from a channel");
 								sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel admin kick <player> " + ChatColor.GRAY + "--> Kicks the specified player from their channel");
 								sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel admin move <player> <channel> " + ChatColor.GRAY + "--> Moves the specified player to a different channel");
@@ -119,6 +120,12 @@ public class PremierChatCommand implements CommandExecutor {
 										Player muted = Bukkit.getPlayer(args[3]);
 										int time = Integer.parseInt(args[4]);
 										premierChat.getChannelManager().mutePlayer(muted, time);
+									}
+								} else if (args[2].equalsIgnoreCase("ban")) {
+									if (player.hasPermission(rootPerm + ".ban")) {
+										OfflinePlayer banned = Bukkit.getOfflinePlayer(args[3]);
+										String channel = args[4];
+										premierChat.getChannelManager().banPlayer(banned, channel);
 									}
 								} else if (args[2].equalsIgnoreCase("move")) {
 									if (player.hasPermission(rootPerm + ".move")) {

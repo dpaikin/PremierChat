@@ -26,7 +26,6 @@ public class Channel {
 		this.channelName = name;
 		this.channelType = channelType;
 		this.format = ChatColor.translateAlternateColorCodes('?', format);
-		setBannedPlayers(PremierChat.getInstance().getChannelManager().getBannedPlayers(name));
 		hasTimer = false;
 		timer = 0;
 		joinMessage = ChatColor.GREEN + "You've joined " + name + "!";
