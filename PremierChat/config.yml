@@ -1,19 +1,32 @@
-PluginName: TestChat
+PluginName: PremierChat
+PluginPrefix: PC
 Admin:
-  Permission: premierchat.admin
-PluginPrefix: TC
+  Permission: premierchat/dot/admin
+Message:
+  Format:
+    to: ?7;msg; ?l-> /fbracket/?d?l;from;?7?l/rbracket/
+    from: ?7?l/fbracket/?d?l;from;?7?l/rbracket/ ->?r?7 ;msg;
 Prefixes:
   Default:
-    prefix: Hi
+    prefix: none
+  Admin:
+    prefix: ?7?l/fbracket/?4?lAdmin?7?l/rbracket/
+  Players:
+    af5bc0a9-cd83-4a82-9edf-e2a70c9ea36f:
+      #Astram
+      Prefix: Admin
 Channels:
   OnlineChannels: 
     - Global
     - Local
   DefaultChannel: Global
   Global:
-    format: Global 
+    format: Global
     type: GLOBAL
+    timer: 5
+    joinMessage: You joined global!
   Local:
     format: Local 
     type: LOCAL
     range: 100
+    joinMessage: You joined local!

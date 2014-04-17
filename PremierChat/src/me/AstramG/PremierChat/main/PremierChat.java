@@ -37,7 +37,7 @@ public class PremierChat extends JavaPlugin {
 	 * - Channel Prefixes - DONE
 	 * - Player Prefixes - DONE
 	 * - Mentioning System - DONE
-	 * - Messaging System - NOT DONE
+	 * - Messaging System - DONE
 	 * - MySQL support - NOT DONE
 	 * - MultiChannel Support - NOT DONE
 	 * - Bungee support - NOT DONE
@@ -122,6 +122,8 @@ public class PremierChat extends JavaPlugin {
 	public void registerCommands() {
 		getCommand("pc").setExecutor(new PremierChatCommand(this));
 		getCommand("uuid").setExecutor(new UUIDCommands(this));
+		getCommand("msg").setExecutor(getMessenger());
+		getCommand("r").setExecutor(getMessenger());
 	}
 	
 }

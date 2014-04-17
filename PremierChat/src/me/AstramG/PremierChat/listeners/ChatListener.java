@@ -9,6 +9,7 @@ import me.AstramG.PremierChat.chat.ChannelType;
 import me.AstramG.PremierChat.chat.LocalChannel;
 import me.AstramG.PremierChat.chat.Messenger.MessageType;
 import me.AstramG.PremierChat.events.ChannelJoinEvent;
+import me.AstramG.PremierChat.events.MessageSendEvent;
 import me.AstramG.PremierChat.main.PremierChat;
 import me.AstramG.PremierChat.util.UUIDFetcher;
 
@@ -27,6 +28,13 @@ public class ChatListener implements Listener {
 	
 	public ChatListener(PremierChat premierchat) {
 		this.premierchat = premierchat;
+	}
+	
+	@EventHandler
+	public void onMessageReceive(MessageSendEvent event) {
+		premierchat.getMessenger().sendPrivateMessage(event.getFrom(), event.getTo(), event.getMessage());
+		premierchat.getMessenger().lastChat.put(event.getTo().getName(), event.getFrom().getName());
+		premierchat.getMessenger().lastChat.put(event.getFrom().getName(), event.getTo().getName());
 	}
 	
 	@EventHandler

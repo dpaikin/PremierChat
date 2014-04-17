@@ -10,6 +10,7 @@ import me.AstramG.PremierChat.chat.PermissionChannel;
 import me.AstramG.PremierChat.chat.UnlistedChannel;
 import me.AstramG.PremierChat.events.ChannelJoinEvent;
 import me.AstramG.PremierChat.events.ChannelLeaveEvent;
+import me.AstramG.PremierChat.events.MessageSendEvent;
 import me.AstramG.PremierChat.events.ChannelLeaveEvent.LeaveReason;
 import me.AstramG.PremierChat.main.PremierChat;
 
@@ -38,6 +39,21 @@ public class PremierChatCommand implements CommandExecutor {
 				sender.sendMessage(ChatColor.GREEN + "" + "  - /msg <player> <message> " + ChatColor.GRAY + "--> Sends a message to a player");
 				sender.sendMessage(ChatColor.GREEN + "" + "  - /r <message> " + ChatColor.GRAY + "--> Replies the message to the last player contacted");
 				sender.sendMessage(ChatColor.GREEN + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------" + ChatColor.GREEN + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------");
+			}
+			if (args.length >= 3 && args[0].equalsIgnoreCase("msg")) {
+				if (sender instanceof Player) {
+					Player player = (Player) sender;
+					if (Bukkit.getOfflinePlayer(args[1]).isOnline()) {
+						Player messageTo = Bukkit.getPlayer(args[1]);
+						String message = "";
+						for (int i = 2; i < args.length; i ++) {
+							message += args[i] + " ";
+						}
+						Bukkit.getPluginManager().callEvent(new MessageSendEvent(player, messageTo, message));
+					} else {
+						premierChat.getMessenger().sendMessage(player, "The player could not be found", MessageType.DANGER);
+					}
+				}
 			}
 			if (args.length >= 1) {
 				if (args[0].equalsIgnoreCase("channel")) {

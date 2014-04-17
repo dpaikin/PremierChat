@@ -9,3 +9,9 @@ commands:
   uuid:
     usage: /uuid <player>
     description: Shows the UUID of the player!
+  msg:
+    usage: /msg <player> <msg>
+    description: Messages the player with the message!
+  r:
+    usage: /r <msg>
+    usage: Replies to the last person spoken to!
