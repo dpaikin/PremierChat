@@ -45,8 +45,8 @@ public class Messenger implements CommandExecutor {
 			if (!(sender instanceof Player)) return true;
 			Player player = (Player) sender;
 			if (args.length >= 2) {
-				if (Bukkit.getOfflinePlayer(args[1]).isOnline()) {
-					Player messageTo = Bukkit.getPlayer(args[1]);
+				if (Bukkit.getOfflinePlayer(args[0]).isOnline()) {
+					Player messageTo = Bukkit.getPlayer(args[0]);
 					String message = "";
 					for (int i = 1; i < args.length; i ++) {
 						message += args[i] + " ";

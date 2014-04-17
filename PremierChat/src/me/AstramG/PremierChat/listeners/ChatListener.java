@@ -32,9 +32,9 @@ public class ChatListener implements Listener {
 	
 	@EventHandler
 	public void onMessageReceive(MessageSendEvent event) {
-		premierchat.getMessenger().sendPrivateMessage(event.getFrom(), event.getTo(), event.getMessage());
 		premierchat.getMessenger().lastChat.put(event.getTo().getName(), event.getFrom().getName());
 		premierchat.getMessenger().lastChat.put(event.getFrom().getName(), event.getTo().getName());
+		premierchat.getMessenger().sendPrivateMessage(event.getFrom(), event.getTo(), event.getMessage());
 	}
 	
 	@EventHandler

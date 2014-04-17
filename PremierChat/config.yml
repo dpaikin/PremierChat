@@ -1,32 +1,69 @@
-PluginName: PremierChat
-PluginPrefix: PC
+#For ChatColor use ? instead of &, the config doesn't like & and will give errors.
+#For [] use /fbracket/ = [ AND /rbracket/ = ] This is because the config doesn't like those characters either.
+#For any period use /dot/, but it might only work in permission nodes.
+
+#These hashtags are comment signs and can be placed in the config
+#The hashtags don't get read by the interpretter.
+#I suggest you use them under any UUIDs to identify the player
+
+PluginName: TestChat
+PluginPrefix: TC
+#The admin base permission, /dot/ represents a . for the permission
 Admin:
   Permission: premierchat/dot/admin
+#Message is what happens when a player does /msg, from is what the sender receives and to is what the message receiver receives.
+#Use ;msg; for the message, ;from; for who sent it, and ;to; for who it is sent to!
 Message:
   Format:
-    to: ?7;msg; ?l-> /fbracket/?d?l;from;?7?l/rbracket/
-    from: ?7?l/fbracket/?d?l;from;?7?l/rbracket/ ->?r?7 ;msg;
+    from: ?7;msg; ?l-> /fbracket/?d?l;to;?7?l/rbracket/
+    to: ?7?l/fbracket/?d?l;from;?7?l/rbracket/ ->?r?7 ;msg;
 Prefixes:
   Default:
+    #If you don't want a prefix use none instead of leaving it blank
     prefix: none
   Admin:
     prefix: ?7?l/fbracket/?4?lAdmin?7?l/rbracket/
   Players:
-    af5bc0a9-cd83-4a82-9edf-e2a70c9ea36f:
+    #Below is a UUID for a player with a prefix, it is obtained by using /uuid <player> in-game!
+    PUTAUUIDHERE:
       #Astram
       Prefix: Admin
+    PUTAUUIDHERE:
+      #Notch
+      Prefix: Admin
 Channels:
+  #OnlineChannels are the channels that are enabled and joinable!
   OnlineChannels: 
     - Global
     - Local
+    - PrivateHidden
+    - Permissions
+    - Derp
+  #Channel that players automatically get moved into upon joining or being kicked!
+  #;name; represents player name, ;prefix; represents their preifx, ;msg; represents the message
+  #timer can go in any channel and is an amount of seconds of cooldown between messages
+  #type is either GLOBAL, LOCAL, WORLD, UNLISTED, or PERMISSION
   DefaultChannel: Global
   Global:
-    format: Global
+    format: ?b?l<G> ;prefix; ?7;name;?b?l>?r ?7;msg;
     type: GLOBAL
-    timer: 5
-    joinMessage: You joined global!
+    timer: 10
+    joinMessage: 
   Local:
-    format: Local 
+    format: ?7/fbracket/?4?lLocal?r?7/rbracket/ ?7;name; ?7?m-->?r ?7;msg;
     type: LOCAL
     range: 100
-    joinMessage: You joined local!
+    joinMessage: Joined local
+  PrivateHidden:
+    format: ?e?l<U> ?7;name;?e?l>?r ?7;msg;
+    type: UNLISTED
+    joinMessage: You have joined the unlisted channel!
+  Permissions:
+    format: ?a?l<P> ?7;name;?a?l>?r ?7;msg;
+    type: PERMISSION
+    permission: permissionchannel/dot/join
+    joinMessage: ?3You have joined the secret testing permission channel!
+  Derp:
+    format: ?1?l<Derp>?r ?7;msg;?o was said by ;name;
+    type: UNLISTED
+    joinMessage: ?4You have joined derp!
