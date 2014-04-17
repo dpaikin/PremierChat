@@ -1,7 +1,9 @@
 PluginName: TestChat
 PluginPrefix: TC
 Channels:
-  OnlineChannels: Global, Local
+  OnlineChannels: 
+    - Global
+    - Local
   DefaultChannel: Global
   Global:
     format: Global 

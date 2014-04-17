@@ -28,10 +28,10 @@ public class Messenger {
 	public void sendMessage(Player player, String message, MessageType type) {
 		switch (type) {
 		case NOTIFICATION:
-			message = ChatColor.GREEN + "" + ChatColor.BOLD + "[" + ChatColor.GRAY + ChatColor.BOLD + pluginPrefix + ChatColor.GREEN + ChatColor.BOLD + "]" + ChatColor.RESET + ChatColor.GREEN + message;
+			message = ChatColor.GREEN + "" + ChatColor.BOLD + "[" + ChatColor.GRAY + ChatColor.BOLD + pluginPrefix + ChatColor.GREEN + ChatColor.BOLD + "] " + ChatColor.RESET + ChatColor.GREEN + message;
 			break;
 		case DANGER:
-			message = ChatColor.GREEN + "" + ChatColor.BOLD + "[" + ChatColor.GRAY + ChatColor.BOLD + pluginPrefix + ChatColor.GREEN + ChatColor.BOLD + "]" + ChatColor.RESET + ChatColor.RED + message;
+			message = ChatColor.GREEN + "" + ChatColor.BOLD + "[" + ChatColor.GRAY + ChatColor.BOLD + pluginPrefix + ChatColor.GREEN + ChatColor.BOLD + "] " + ChatColor.RESET + ChatColor.RED + message;
 			break;
 		}
 		player.sendMessage(message);

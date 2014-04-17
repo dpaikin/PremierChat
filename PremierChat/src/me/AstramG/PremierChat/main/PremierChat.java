@@ -9,6 +9,7 @@ import me.AstramG.PremierChat.chat.ChannelType;
 import me.AstramG.PremierChat.chat.LocalChannel;
 import me.AstramG.PremierChat.chat.Messenger;
 import me.AstramG.PremierChat.chat.PermissionChannel;
+import me.AstramG.PremierChat.chat.UnlistedChannel;
 import me.AstramG.PremierChat.commands.PremierChatCommand;
 import me.AstramG.PremierChat.listeners.ChatListener;
 
@@ -24,9 +25,9 @@ public class PremierChat extends JavaPlugin {
 	 * - Implement World Chat - DONE
 	 * - Custom Chat Channels for those 3 chats - DONE
 	 * - Chat Channels for specific PEX groups - DONE
-	 * - Chat Timers - NOT DONE
+	 * - Chat Timers - DONE
 	 * - Permissions for chat channels - DONE
-	 * - Price for certain channels - NOT DONE
+	 * - Price for speaking in certain channels - NOT DONE / QUESTIONABLE ADDITION
 	 * - Channel Join Messages - IMPLEMENTATION ADDED BUT NOT DONE
 	 * - Channel Leave Messages - IMPLEMENTATION ADDED BUT NOT DONE
 	 * - Channel Bans - IMPLEMENTATION SOMEWHAT ADDED BUT NOT DONE
@@ -46,7 +47,6 @@ public class PremierChat extends JavaPlugin {
 	static PremierChat premierChat;
 	
 	public void onEnable() {
-		Bukkit.broadcastMessage("TEST");
 		premierChat = this;
 		messenger = new Messenger(this);
 		channelManager = new ChannelManager(this);
@@ -79,11 +79,19 @@ public class PremierChat extends JavaPlugin {
 			String format = this.getConfig().getString(root + "format");
 			Channel channel;
 			if (type == ChannelType.PERMISSION) {
-				channel = new PermissionChannel(onlineChannel, format, type, this.getConfig().getString(root + "permission"));
+				channel = new PermissionChannel(onlineChannel, format, type, this.getConfig().getString(root + "permission").replace("/dot/", "."));
 			} else if (type == ChannelType.LOCAL) {
 				channel = new LocalChannel(onlineChannel, format, type, this.getConfig().getDouble(root + "range"));
+			} else if (type == ChannelType.UNLISTED) {
+				channel = new UnlistedChannel(onlineChannel, format, type, true);
 			} else {
 				channel = new Channel(onlineChannel, format, type);
+			}
+			if (this.getConfig().getInt(root + "timer") != 0) {
+				channel.setTimer(true, this.getConfig().getInt(root + "timer"));
+			}
+			if (this.getConfig().getString(root + "joinMessage") != null) {
+				channel.setJoinMessage(this.getConfig().getString("joinMessage"));
 			}
 			if (!(onlineChannel.equalsIgnoreCase(defaultChannel))) {
 				channelManager.registerNewChannel(channel, false);

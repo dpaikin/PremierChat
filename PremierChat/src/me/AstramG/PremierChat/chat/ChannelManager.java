@@ -9,8 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.AstramG.PremierChat.chat.Messenger.MessageType;
+import me.AstramG.PremierChat.events.ChannelJoinEvent;
+import me.AstramG.PremierChat.events.ChannelLeaveEvent;
+import me.AstramG.PremierChat.events.ChannelLeaveEvent.LeaveReason;
 import me.AstramG.PremierChat.main.PremierChat;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class ChannelManager {
@@ -46,6 +51,29 @@ public class ChannelManager {
 		return null;
 	}
 	
+	public void joinNewChannel(Player player, String channelName) {
+		if (getChannel(channelName).getType() == ChannelType.PERMISSION) {
+			PermissionChannel permissionChannel = (PermissionChannel) getChannel(channelName);
+			if (!(player.hasPermission(permissionChannel.getPermission()))) {
+				premierChat.getMessenger().sendMessage(player, "You don't have the permission to join this channel!", MessageType.DANGER);
+				return;
+			}
+		}
+		if (this.playerChannels.get(player.getName()) != null) {
+			Channel currentChannel = playerChannels.get(player.getName());
+			Bukkit.getPluginManager().callEvent(new ChannelLeaveEvent(currentChannel, player, LeaveReason.JOIN_ANOTHER));
+			List<String> currentPlayers = currentChannel.getPlayers();
+			currentPlayers.remove(player.getName());
+			currentChannel.setPlayers(currentPlayers);
+		}
+		Channel channel = premierChat.getChannelManager().getChannel(channelName);
+		premierChat.getChannelManager().playerChannels.put(player.getName(), channel);
+		Bukkit.getPluginManager().callEvent(new ChannelJoinEvent(channel, player));
+		List<String> newPlayers = channel.getPlayers();
+		newPlayers.add(player.getName());
+		channel.setPlayers(newPlayers);
+	}
+	
 	public Boolean isInSameChannelAs(Player player, Player compare) {
 		return playerChannels.get(player.getName()).getName().equalsIgnoreCase(playerChannels.get(player.getName()).getName());
 	}
@@ -58,7 +86,11 @@ public class ChannelManager {
 	}
 	
 	public List<String> getBannedPlayers(String channelName) {
-		File file = new File(premierChat.getDataFolder() + "/" + channelName + ".txt");
+		File dir = new File("PremierChannels");
+		if (!(dir.exists())) {
+			dir.mkdir();
+		}
+		File file = new File(dir + "/" + channelName + "Bans.txt");
 		if (!(file.exists())) {
 			try {
 				file.createNewFile();

@@ -2,7 +2,7 @@ package me.AstramG.PremierChat.chat;
 
 public class UnlistedChannel extends Channel {
 
-	Boolean unlisted;
+	private Boolean unlisted;
 	
 	public UnlistedChannel(String name, String format, ChannelType channelType, Boolean unlisted) {
 		super(name, format, channelType);

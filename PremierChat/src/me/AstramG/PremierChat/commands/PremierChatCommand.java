@@ -8,12 +8,8 @@ import me.AstramG.PremierChat.chat.Messenger;
 import me.AstramG.PremierChat.chat.Messenger.MessageType;
 import me.AstramG.PremierChat.chat.PermissionChannel;
 import me.AstramG.PremierChat.chat.UnlistedChannel;
-import me.AstramG.PremierChat.events.ChannelJoinEvent;
-import me.AstramG.PremierChat.events.ChannelLeaveEvent;
-import me.AstramG.PremierChat.events.ChannelLeaveEvent.LeaveReason;
 import me.AstramG.PremierChat.main.PremierChat;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -34,8 +30,8 @@ public class PremierChatCommand implements CommandExecutor {
 				sender.sendMessage(ChatColor.GREEN + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------" + ChatColor.GREEN + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------");
 				sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + Messenger.getPluginName() + " commands:");
 				sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel " + ChatColor.GRAY + "--> Channel Commands");
-				sender.sendMessage(ChatColor.GREEN + "" + "  - /msg <player> <message>" + ChatColor.GRAY + "--> Sends a message to a player");
-				sender.sendMessage(ChatColor.GREEN + "" + "  - /r <message>" + ChatColor.GRAY + "--> Replies the message to the last player contacted");
+				sender.sendMessage(ChatColor.GREEN + "" + "  - /msg <player> <message> " + ChatColor.GRAY + "--> Sends a message to a player");
+				sender.sendMessage(ChatColor.GREEN + "" + "  - /r <message> " + ChatColor.GRAY + "--> Replies the message to the last player contacted");
 				sender.sendMessage(ChatColor.GREEN + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------" + ChatColor.GREEN + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------");
 			}
 			if (args.length >= 1) {
@@ -46,8 +42,8 @@ public class PremierChatCommand implements CommandExecutor {
 							sender.sendMessage(ChatColor.GREEN + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------" + ChatColor.GREEN + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------");
 							sender.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "Channel commands:");
 							sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel list " + ChatColor.GRAY + "--> Displays a list of all of the availible channels");
-							sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel join <channel>" + ChatColor.GRAY + "--> Joins the specified channel");
-							sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel info <channel>" + ChatColor.GRAY + "--> Displays information for a channel");
+							sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel join <channel> " + ChatColor.GRAY + "--> Joins the specified channel");
+							sender.sendMessage(ChatColor.GREEN + "" + "  - /pc channel info <channel> " + ChatColor.GRAY + "--> Displays information for a channel");
 							sender.sendMessage(ChatColor.GREEN + "" + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------" + ChatColor.GREEN + ChatColor.STRIKETHROUGH + "----------" + ChatColor.RED + ChatColor.STRIKETHROUGH + "----------");
 						} else if (args.length == 2) {
 							if (args[1].equalsIgnoreCase("list")) {
@@ -55,15 +51,15 @@ public class PremierChatCommand implements CommandExecutor {
 								for (Channel channel : premierChat.getChannelManager().getChannels()) {
 									allowedChannels.add(channel);
 									if (channel instanceof PermissionChannel) {
-										if (player.hasPermission(((PermissionChannel) channel).getPermission())) allowedChannels.remove(channel);
+										if (!(player.hasPermission(((PermissionChannel) channel).getPermission()))) allowedChannels.remove(channel);
 									} else if (channel instanceof UnlistedChannel) {
-										if (((UnlistedChannel) channel).isUnlisted()) allowedChannels.remove(channel);
+										if (((UnlistedChannel) channel).isUnlisted() && !player.isOp()) allowedChannels.remove(channel);
 									}
 								}
 								String channelString = "Channels: ";
 								for (Channel channel : allowedChannels) {
 									if (!(allowedChannels.indexOf(channel) + 1 == allowedChannels.size())) {
-										channelString += channel.getName() + ",";
+										channelString += channel.getName() + ", ";
 									} else {
 										channelString += channel.getName();
 									}
@@ -74,23 +70,13 @@ public class PremierChatCommand implements CommandExecutor {
 							if (premierChat.getChannelManager().containsChannel(args[2])) {
 								if (args[1].equalsIgnoreCase("join")) {
 									String channelToJoin = args[2];
-									Channel currentChannel = premierChat.getChannelManager().playerChannels.get(player.getName());
-									Bukkit.getPluginManager().callEvent(new ChannelLeaveEvent(currentChannel, player, LeaveReason.JOIN_ANOTHER));
-									List<String> currentPlayers = currentChannel.getPlayers();
-									currentPlayers.remove(player.getName());
-									currentChannel.setPlayers(currentPlayers);
-									Channel channel = premierChat.getChannelManager().getChannel(channelToJoin);
-									premierChat.getChannelManager().playerChannels.put(player.getName(), channel);
-									Bukkit.getPluginManager().callEvent(new ChannelJoinEvent(channel, player));
-									List<String> newPlayers = channel.getPlayers();
-									newPlayers.add(player.getName());
-									channel.setPlayers(newPlayers);
+									premierChat.getChannelManager().joinNewChannel(player, channelToJoin);
 								} else if (args[1].equalsIgnoreCase("info")) {
 									String channelToDisplay = args[2];
 									Channel channel = premierChat.getChannelManager().getChannel(channelToDisplay);
 									premierChat.getMessenger().sendMessage(player, "Channel Type: " + channel.getType().toString(), MessageType.NOTIFICATION);
 									premierChat.getMessenger().sendMessage(player, "Players: " + channel.getPlayers().size(), MessageType.NOTIFICATION);
-									//premierChat.getMessenger().sendMessage(player, "Prefix: " + channel.getPrefix(), MessageType.NOTIFICATION);
+									premierChat.getMessenger().sendMessage(player, "Format:  " + channel.getFormat(), MessageType.NOTIFICATION);
 								}
 							} else {
 								player.sendMessage(ChatColor.RED + "Couldn't find the specified channel or incorrect arguments!");
