@@ -28,10 +28,10 @@ public class PremierChat extends JavaPlugin {
 	 * - Chat Timers - DONE
 	 * - Permissions for chat channels - DONE
 	 * - Price for speaking in certain channels - NOT DONE / QUESTIONABLE ADDITION
-	 * - Channel Join Messages - IMPLEMENTATION ADDED BUT NOT DONE
-	 * - Channel Leave Messages - IMPLEMENTATION ADDED BUT NOT DONE
+	 * - Channel Join Messages - DONE
+	 * - Channel Leave Messages - IMPLEMENTATION ADDED / QUESTIONABLE ADDITION
 	 * - Channel Bans - IMPLEMENTATION SOMEWHAT ADDED BUT NOT DONE
-	 * - Channel Mutes - NOT DONE
+	 * - Channel Mutes - DONE
 	 * - Channel Moderators - NOT DONE
 	 * - Channel Prefixes - DONE
 	 * - Player Prefixes - NOT DONE
@@ -90,9 +90,7 @@ public class PremierChat extends JavaPlugin {
 			if (this.getConfig().getInt(root + "timer") != 0) {
 				channel.setTimer(true, this.getConfig().getInt(root + "timer"));
 			}
-			if (this.getConfig().getString(root + "joinMessage") != null) {
-				channel.setJoinMessage(this.getConfig().getString("joinMessage"));
-			}
+			channel.setJoinMessage(this.getConfig().getString(root + "joinMessage"));
 			if (!(onlineChannel.equalsIgnoreCase(defaultChannel))) {
 				channelManager.registerNewChannel(channel, false);
 			} else {

@@ -1,4 +1,6 @@
 PluginName: TestChat
+Admin:
+  Permission: premierchat.admin
 PluginPrefix: TC
 Channels:
   OnlineChannels: 

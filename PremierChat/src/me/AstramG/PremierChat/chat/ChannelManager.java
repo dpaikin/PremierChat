@@ -17,12 +17,14 @@ import me.AstramG.PremierChat.main.PremierChat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class ChannelManager {
 	
 	private PremierChat premierChat;
 	private List<Channel> channels = new ArrayList<Channel>();
 	private Channel defaultChannel;
+	public List<String> mutedPlayers = new ArrayList<String>();
 	public HashMap<String, Channel> playerChannels = new HashMap<String, Channel>();
 	
 	public ChannelManager(PremierChat premierChat) {
@@ -49,6 +51,17 @@ public class ChannelManager {
 			}
 		}
 		return null;
+	}
+	
+	public void mutePlayer(final Player player, int time) {
+		mutedPlayers.add(player.getName());
+		Bukkit.getScheduler().scheduleSyncDelayedTask(premierChat, new BukkitRunnable() {
+			public void run() {
+				if (mutedPlayers.contains(player.getName())) {
+					mutedPlayers.remove(player.getName());
+				}
+			}
+		}, (time * 60) * 20L);
 	}
 	
 	public void joinNewChannel(Player player, String channelName) {

@@ -29,6 +29,7 @@ public class Channel {
 		setBannedPlayers(PremierChat.getInstance().getChannelManager().getBannedPlayers(name));
 		hasTimer = false;
 		timer = 0;
+		joinMessage = ChatColor.GREEN + "You've joined " + name + "!";
 	}
 	
 	public void setJoinMessage(String joinMessage) {
@@ -36,7 +37,7 @@ public class Channel {
 	}
 	
 	public String getJoinMessage() {
-		return joinMessage;
+		return this.joinMessage;
 	}
 	
 	public String getName() {

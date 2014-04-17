@@ -9,17 +9,13 @@ import me.AstramG.PremierChat.chat.LocalChannel;
 import me.AstramG.PremierChat.chat.Messenger.MessageType;
 import me.AstramG.PremierChat.events.ChannelJoinEvent;
 import me.AstramG.PremierChat.main.PremierChat;
-import net.minecraft.server.v1_7_R1.EntityPlayer;
-import net.minecraft.server.v1_7_R1.PacketPlayOutCloseWindow;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_7_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerChatTabCompleteEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class ChatListener implements Listener {
@@ -32,7 +28,7 @@ public class ChatListener implements Listener {
 	
 	@EventHandler
 	public void onJoinChat(ChannelJoinEvent event) {
-		if (!(event.getChannel().getJoinMessage().equalsIgnoreCase(""))) {
+		if (!(event.getChannel().getJoinMessage() == null)) {
 			premierchat.getMessenger().sendMessage(event.getPlayer(), ChatColor.translateAlternateColorCodes('?', event.getChannel().getJoinMessage()), MessageType.NOTIFICATION);
 		}
 	}
@@ -48,19 +44,13 @@ public class ChatListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onTabComplete(PlayerChatTabCompleteEvent event) {
-		Channel channel = premierchat.getChannelManager().getDefaultChannel();
-		doChannelMessage(event.getPlayer(), event.getChatMessage(), channel);
-		EntityPlayer ep = ((CraftPlayer) event.getPlayer()).getHandle();
-		PacketPlayOutCloseWindow packet = new PacketPlayOutCloseWindow();
-		ep.playerConnection.sendPacket(packet);
-		String format = channel.getFormat().replace(";name;", event.getPlayer().getName()).replace(";msg;", event.getChatMessage()).replace("/fbracket/", "[").replace("/rbracket/", "]");
-		event.getPlayer().sendMessage(format);
-	}
-	
-	@EventHandler
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
+		if (premierchat.getChannelManager().mutedPlayers.contains(player.getName())) {
+			premierchat.getMessenger().sendMessage(player, "You are muted, therefore you may not speak!", MessageType.DANGER);
+			event.setCancelled(true);
+			return;
+		}
 		if (premierchat.getChannelManager().playerChannels.get(player.getName()).canSpeak(player)) {
 			doChannelMessage(player, event.getMessage(), premierchat.getChannelManager().playerChannels.get(player.getName()));
 		} else {
